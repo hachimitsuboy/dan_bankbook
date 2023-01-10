@@ -3,6 +3,9 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 
+def conver_screen():
+    print('表紙画面の表示')
+    
 # サイン項目が選択された時
 def sign_entry(event):
         print('サイン入力欄が選択された')
@@ -31,7 +34,7 @@ def sign_entry(event):
         button.place(x=160, y=150)
         
         
-def Input():
+def input():
     root = tk.Tk()
     root.title('ダン通帳')
     root.geometry('700x400')
@@ -119,7 +122,7 @@ def Input():
                           '日付', '預ける', '引き出す', '利子', '合計', 'サイン',])
 
         # 結果表示
-        Output(df)
+        output(df)
 
     button = ttk.Button(root,
                         text='保存',
@@ -129,7 +132,7 @@ def Input():
     root.mainloop()
 
 
-def Output(df):
+def output(df):
     root = tk.Tk()
     root.title('保存内容')
 
@@ -188,4 +191,5 @@ def Output(df):
 
 
 if __name__ == '__main__':
-    Input()
+    conver_screen()
+    input()
