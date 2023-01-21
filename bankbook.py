@@ -3,57 +3,53 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 
-def conver_screen():
-    print('表紙画面の表示')
-    
 # サイン項目が選択された時
 def sign_entry(event):
-        print('サイン入力欄が選択された')
-        
-        # パスワード入力画面を表示させる
-        root = tk.Tk()
-        root.title('パスワード入力')
-        root.geometry('380x200')
-        password_label = tk.Label(root, text='パスワード：')
-        password_label.place(x=50, y=80)
-        password_input_field = tk.Entry(root)
-        password_input_field.place(x=140, y=80)
-        password_input_field.bind()
-        
-        def check_password():
-            password = 'lOBo1999'
-            input_value = password_input_field.get()
-            print('パスワードチェック: ', input_value)
-            if password == input_value:
-                tk.messagebox.showinfo('メッセージ', '認証完了')
-                root.destroy()
-            else:
-                tk.messagebox.showwarning('エラー', '誤ったパスワードです')
-            
-        button = tk.Button(root, text='送信', command=check_password)
-        button.place(x=160, y=150)
-        
-        
-def input():
+    print('サイン入力欄が選択された')
+
+    # パスワード入力画面を表示させる
     root = tk.Tk()
-    root.title('ダン通帳')
-    root.geometry('700x400')
-    frame = ttk.Frame(root, width=700, height=400)
-    frame.grid(row=0, column=0)
+    root.title('パスワード入力')
+    root.geometry('380x200')
+    password_label = tk.Label(root, text='パスワード：')
+    password_label.place(x=50, y=80)
+    password_input_field = tk.Entry(root)
+    password_input_field.place(x=140, y=80)
+    password_input_field.bind()
+
+    def check_password():
+        password = 'lOBo1999'
+        input_value = password_input_field.get()
+        print('パスワードチェック: ', input_value)
+        if password == input_value:
+            tk.messagebox.showinfo('メッセージ', '認証完了')
+            root.destroy()
+        else:
+            tk.messagebox.showwarning('エラー', '誤ったパスワードです')
+
+    button = tk.Button(root, text='送信', command=check_password)
+    button.place(x=160, y=150)
+
+
+def trading_history():
+    
+    frame.destroy()
+    trading_history_frame = ttk.Frame(root)
+    trading_history_frame.grid(row=0, column=0)
 
     # 項目をつくる
     items = ['日付', '預ける', '引き出す', '利子', '合計', 'サイン']
     for i in range(0, len(items)):
-        label_item = ttk.Label(frame,
+        label_item = ttk.Label(trading_history_frame,
                                text=items[i])
         label_item.grid(row=0, column=i)
 
-    n = 10  # TODO　行数の変更
+    n = 16  # TODO　行数の変更
     # 日付項目
     dates = [0] * n
     for i in range(0, n):
         dates[i] = tk.StringVar()
-        date = ttk.Entry(frame,
+        date = ttk.Entry(trading_history_frame,
                          textvariable=dates[i],
                          width=10)
         date.grid(row=i+1, column=0)
@@ -62,7 +58,7 @@ def input():
     deposits = [0] * n
     for i in range(0, n):
         deposits[i] = tk.StringVar()
-        deposit = ttk.Entry(frame,
+        deposit = ttk.Entry(trading_history_frame,
                             textvariable=deposits[i],
                             width=12)
         deposit.grid(row=i+1, column=1)
@@ -71,7 +67,7 @@ def input():
     withdraws = [0] * n
     for i in range(0, n):
         withdraws[i] = tk.StringVar()
-        withdraw = ttk.Entry(frame,
+        withdraw = ttk.Entry(trading_history_frame,
                              textvariable=withdraws[i],
                              width=12)
         withdraw.grid(row=i+1, column=2)
@@ -80,7 +76,7 @@ def input():
     interests = [0] * n
     for i in range(0, n):
         interests[i] = tk.StringVar()
-        interest = ttk.Entry(frame,
+        interest = ttk.Entry(trading_history_frame,
                              textvariable=interests[i],
                              width=12)
         interest.grid(row=i+1, column=3)
@@ -89,7 +85,7 @@ def input():
     totals = [0] * n
     for i in range(0, n):
         totals[i] = tk.StringVar()
-        total = ttk.Entry(frame,
+        total = ttk.Entry(trading_history_frame,
                           textvariable=totals[i],
                           width=12)
         total.grid(row=i+1, column=4)
@@ -98,7 +94,7 @@ def input():
     signs = [0] * n
     for i in range(0, n):
         signs[i] = tk.StringVar()
-        sign = ttk.Entry(frame,
+        sign = ttk.Entry(trading_history_frame,
                          textvariable=signs[i],
                          width=10)
         sign.bind('<Button-1>', sign_entry)
@@ -136,11 +132,11 @@ def output(df):
     root = tk.Tk()
     root.title('保存内容')
 
-    frame = ttk.Frame(root, padding=5)
-    frame.grid(row=0, column=0)
+    trading_history_frame = ttk.Frame(root, padding=5)
+    trading_history_frame.grid(row=0, column=0)
 
     # ツリービューの作成
-    tree = ttk.Treeview(frame)
+    tree = ttk.Treeview(trading_history_frame)
 
     # 列インデックスの作成
     tree['columns'] = (0, 1, 2, 3, 4, 5)
@@ -191,5 +187,19 @@ def output(df):
 
 
 if __name__ == '__main__':
-    conver_screen()
-    input()
+    root = tk.Tk()
+    root.title('ダン通帳')
+    root.geometry('700x482')
+    frame = ttk.Frame(root)
+    frame.pack(fill=tk.BOTH)
+
+    canvas = tk.Canvas(frame, width=700, height=450)
+    canvas.pack()
+    back_image = tk.PhotoImage(file='back_image.png', width=700, height=450)
+
+    canvas.create_image(0, 0, image=back_image, anchor=tk.NW)
+    next_button = tk.Button(frame, text='取引ページへ', bg='#ffffff', command=trading_history)
+    next_button.pack()
+    
+    root.mainloop()
+
