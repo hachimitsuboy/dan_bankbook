@@ -2,8 +2,13 @@ import pandas as pd
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
+import get_data
+import put_data
+import datetime
 
 # サイン項目が選択された時
+
+
 def sign_entry(event):
     print('サイン入力欄が選択された')
 
@@ -32,73 +37,71 @@ def sign_entry(event):
 
 
 def trading_history():
-    
+
     frame.destroy()
     trading_history_frame = ttk.Frame(root)
     trading_history_frame.grid(row=0, column=0)
+
+    get_data_list = get_data.get_data()
+    trade_list = []
+    for doc in get_data_list:
+        trade_list.append(doc.to_dict())
 
     # 項目をつくる
     items = ['日付', '預ける', '引き出す', '利子', '合計', 'サイン']
     for i in range(0, len(items)):
         label_item = ttk.Label(trading_history_frame,
-                               text=items[i])
+                               text=items[i], anchor=tk.CENTER)
         label_item.grid(row=0, column=i)
 
-    n = 16  # TODO　行数の変更
-    # 日付項目
-    dates = [0] * n
+    n = len(trade_list)
+
     for i in range(0, n):
-        dates[i] = tk.StringVar()
-        date = ttk.Entry(trading_history_frame,
-                         textvariable=dates[i],
-                         width=10)
-        date.grid(row=i+1, column=0)
+        date = datetime.datetime.fromtimestamp(
+            trade_list[i].get('date').timestamp()).date()
+        date = str(date).split('-')
+        date = date[0]+'年'+date[1]+'月'+date[2]+'日'
+        print(date)
+        date_text = ttk.Label(trading_history_frame,
+                              text=date, width=12, padding=[30, 5, 0, 5])
+        date_text.grid(row=i+1, column=0)
 
     # 預ける項目
-    deposits = [0] * n
     for i in range(0, n):
-        deposits[i] = tk.StringVar()
-        deposit = ttk.Entry(trading_history_frame,
-                            textvariable=deposits[i],
-                            width=12)
-        deposit.grid(row=i+1, column=1)
+        deposit = trade_list[i].get('deposit')
+        deposit_text = ttk.Label(
+            trading_history_frame, text=deposit, width=12, anchor=tk.CENTER)
+        deposit_text.grid(row=i+1, column=1)
 
     # 引き出す項目
-    withdraws = [0] * n
     for i in range(0, n):
-        withdraws[i] = tk.StringVar()
-        withdraw = ttk.Entry(trading_history_frame,
-                             textvariable=withdraws[i],
-                             width=12)
-        withdraw.grid(row=i+1, column=2)
+        withdraw = trade_list[i].get('withdraw')
+        withdraw_text = ttk.Label(
+            trading_history_frame, text=withdraw, width=12, anchor=tk.CENTER)
+        withdraw_text.grid(row=i+1, column=2)
 
     # 利子項目
-    interests = [0] * n
     for i in range(0, n):
-        interests[i] = tk.StringVar()
-        interest = ttk.Entry(trading_history_frame,
-                             textvariable=interests[i],
-                             width=12)
-        interest.grid(row=i+1, column=3)
+        interest = trade_list[i].get('interest')
+        interest_text = ttk.Label(
+            trading_history_frame, text=interest, width=12, anchor=tk.CENTER)
+        interest_text.grid(row=i+1, column=3)
 
     # 合計項目
-    totals = [0] * n
+
     for i in range(0, n):
-        totals[i] = tk.StringVar()
-        total = ttk.Entry(trading_history_frame,
-                          textvariable=totals[i],
-                          width=12)
-        total.grid(row=i+1, column=4)
+        total = trade_list[i].get('total')
+        total_text = ttk.Label(trading_history_frame,
+                               text=total, width=12, anchor=tk.CENTER)
+        total_text.grid(row=i+1, column=4)
 
     # サイン項目
-    signs = [0] * n
     for i in range(0, n):
-        signs[i] = tk.StringVar()
-        sign = ttk.Entry(trading_history_frame,
-                         textvariable=signs[i],
-                         width=10)
-        sign.bind('<Button-1>', sign_entry)
-        sign.grid(row=i+1, column=5)
+        sign = trade_list[i].get('sign')
+        sign_text = ttk.Label(trading_history_frame,
+                              text=sign, width=12, anchor=tk.CENTER)
+        # TODO sign.bind('<Button-1>', sign_entry)
+        sign_text.grid(row=i+1, column=5)
 
     # 実行ボタン
 
@@ -198,8 +201,8 @@ if __name__ == '__main__':
     back_image = tk.PhotoImage(file='back_image.png', width=700, height=450)
 
     canvas.create_image(0, 0, image=back_image, anchor=tk.NW)
-    next_button = tk.Button(frame, text='取引ページへ', bg='#ffffff', command=trading_history)
+    next_button = tk.Button(frame, text='取引ページへ',
+                            bg='#ffffff', command=trading_history)
     next_button.pack()
-    
-    root.mainloop()
 
+    root.mainloop()
