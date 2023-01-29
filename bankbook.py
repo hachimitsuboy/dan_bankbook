@@ -8,6 +8,19 @@ import datetime
 
 # サイン項目が選択された時
 
+# 　保存ボタン
+
+
+def save():
+    frame.destroy()
+    trading_entry_frame = ttk.Frame(root)
+    trading_entry_frame.grid(row=0, column=0)
+    items = ['日付', '預ける', '引き出す', '利子', '合計', 'サイン']
+    for i in range(0, len(items)):
+        label_item = ttk.Label(trading_entry_frame,
+                               text=items[i], anchor=tk.CENTER)
+        label_item.grid(row=0, column=i)
+
 
 def sign_entry(event):
     print('サイン入力欄が選択された')
@@ -41,6 +54,8 @@ def trading_history():
     frame.destroy()
     trading_history_frame = ttk.Frame(root)
     trading_history_frame.grid(row=0, column=0)
+
+
 
     get_data_list = get_data.get_data()
     trade_list = []
@@ -105,28 +120,28 @@ def trading_history():
 
     # 実行ボタン
 
-    def execute():
-        # これまでの入力をリストに入れる
-        table_data = []
-        for i in range(0, n):
-            table_data.append([dates[i].get(),
-                               deposits[i].get(),
-                               withdraws[i].get(),
-                               interests[i].get(),
-                               totals[i].get(),
-                               signs[i].get()
-                               ])
-        # pandas dataframeに変換
-        df = pd.DataFrame(table_data, columns=[
-                          '日付', '預ける', '引き出す', '利子', '合計', 'サイン',])
+    # def execute():
+    #     # これまでの入力をリストに入れる
+    #     table_data = []
+    #     for i in range(0, n):
+    #         table_data.append([dates[i].get(),
+    #                            deposits[i].get(),
+    #                            withdraws[i].get(),
+    #                            interests[i].get(),
+    #                            totals[i].get(),
+    #                            signs[i].get()
+    #                            ])
+    #     # pandas dataframeに変換
+    #     df = pd.DataFrame(table_data, columns=[
+    #                       '日付', '預ける', '引き出す', '利子', '合計', 'サイン',])
 
-        # 結果表示
-        output(df)
+    #     # 結果表示
+    #     output(df)
 
     button = ttk.Button(root,
                         text='保存',
                         padding=5,
-                        command=execute)
+                        command=save)
     button.grid(row=1, column=0)
     root.mainloop()
 
@@ -176,13 +191,8 @@ def output(df):
     # ツリービューの配置
     tree.grid(row=0)
 
-    # 　保存ボタン
-    def save():
-        fld = tk.filedialog.askdirectory(initialdir='C:')
-        df.to_csv(fld + '/table.csv', encoding='shift-jis', index=False)
-
     button = ttk.Button(root,
-                        text='保存',
+                        text='入力',
                         command=save)
     button.grid(row=2, pady=5)
 
@@ -195,11 +205,9 @@ if __name__ == '__main__':
     root.geometry('700x482')
     frame = ttk.Frame(root)
     frame.pack(fill=tk.BOTH)
-
     canvas = tk.Canvas(frame, width=700, height=450)
     canvas.pack()
     back_image = tk.PhotoImage(file='back_image.png', width=700, height=450)
-
     canvas.create_image(0, 0, image=back_image, anchor=tk.NW)
     next_button = tk.Button(frame, text='取引ページへ',
                             bg='#ffffff', command=trading_history)
