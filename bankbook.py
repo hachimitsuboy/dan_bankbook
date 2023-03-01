@@ -132,11 +132,10 @@ def put_data_entry():
                         text='入力',
                         command= lambda : put_data.put_data(datetime_entry.get(), deposit_entry.get(), withdraw_entry.get(), interest_entry.get(), total_entry.get(), sign_entry.get()))
     button.place(x=265, y=100)
-
     root.mainloop()
 
 if __name__ == '__main__':
-    cred = credentials.Certificate("./dan-bankbook-firebase-adminsdk-hjd6u-8c0fe69935.json")
+    cred = credentials.Certificate("./dan-bankbook-firebase-adminsdk-hjd6u-71cf77a6e3.json")
     firebase_admin.initialize_app(cred)
     
     root = tk.Tk()
@@ -149,7 +148,7 @@ if __name__ == '__main__':
     back_image = tk.PhotoImage(file='back_image.png', width=700, height=450)
     canvas.create_image(0, 0, image=back_image, anchor=tk.NW)
     next_button = tk.Button(frame, text='取引ページへ',
-                            bg='#ffffff', command=trading_history())
+                            bg='#ffffff', command=trading_history)
     next_button.pack()
 
     root.mainloop()
