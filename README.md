@@ -8,3 +8,5 @@
 - Tkinter
 - Firestore
 
+## デモ動画
+https://youtu.be/4sVE9SAvtS8
